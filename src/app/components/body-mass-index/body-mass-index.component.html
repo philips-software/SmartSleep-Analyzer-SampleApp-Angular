@@ -1,0 +1,68 @@
+<div class="container">
+
+  <div
+    *ngIf="loading"
+    class="d-flex justify-content-center align-items-center"
+    [ngStyle]="{ height: 'calc(100vh - 100px)' }">
+    <div
+      class="spinner-border text-primary"
+      role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- *ngIf = only show element if condition exists -->
+  <div
+    *ngIf="questions.length"
+    class="row">
+    <div class="col-md-6 offset-md-3">
+
+      <h2 class="mt-5"><i>Note: the Scoring API uses metric units for all calculations by default.</i></h2>
+
+      <!-- apply form property from class to [formGroup] directive to keep form properties in sync with class -->
+      <!-- use Angular's (ngSubmit) method to submit form - onSubmit() must exist in class -->
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="mt-5">
+
+        <!-- loop through questions and create inputs -->
+        <div
+          *ngFor="let question of questions"
+          class="form-group">
+
+          <!-- [for] is Angular syntax for the html for attribute -->
+          <label [for]="question.id">{{ question.questionText }}</label>
+
+          <!-- [id] is Angular syntax for the html id attribute -->
+          <!-- [formControlName] maps the input to the class FormControl element in the FormGroup -->
+          <input
+            *ngIf="question.type === 'DoubleSenseValue'"
+            type="number"
+            class="form-control"
+            [id]="question.id"
+            [formControlName]="question.id">
+        </div>
+
+        <!-- [disabled] is an Angular directive that will add the html disabled attribute if condition is true -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || submitting">
+          <span
+            *ngIf="submitting"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true">
+          </span>
+          Submit
+        </button>
+
+      </form>
+
+      <h4 class="mt-5">Body Mass Index Calculation: {{ bmiCalculation }}</h4>
+
+    </div>
+  </div>
+
+</div>

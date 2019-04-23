@@ -1,0 +1,1202 @@
+<div class="container pb-lg-5">
+
+  <div class="jumbotron mt-5">
+    <h1 class="display-4">Philips SmartSleep Analyzer Sample Application</h1>
+    <p class="lead">This application is built in <a href="https://angular.io" target="_blank">Angular</a> 7 using Angular's <a href="https://cli.angular.io" target="_blank">CLI</a> tool, <a href="http://es6-features.org" target="_blank">ES6</a> and <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a>. <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> will be used for our HTML and CSS.</p>
+    <hr class="my-4">
+    <p>Click the button below to see a demo of the tutorial.</p>
+    <a class="btn btn-primary btn-lg" routerLink="/body-mass-index" role="button">See It In Action!</a>
+  </div>
+
+  <h2>Objectives</h2>
+
+  <p>You will be building a simple form that will allow a client to enter their height and weight to calculate body mass index.</p>
+
+  <p>Below are some of the steps you will be taking:</p>
+
+  <ul>
+    <li>Learn the basics of creating Angular applications with ES6 and TypeScript</li>
+    <li>Create resources to handle data requests, responses, storage and event techniques</li>
+    <li>Use Angular's built in HTTP library to access data from the Philips SmartSleep Analyzer API endpoints</li>
+    <li>Create a form using Angular's reactive forms module</li>
+  </ul>
+
+  <h4><i>As you go through the tutorial it is suggested that you read all the comments in the code as they will add granular descriptions of each method that might not have been covered below.</i></h4>
+
+  <h2>Prerequisites:</h2>
+
+  <p>You will need to set up the following tools to develop this application.</p>
+
+  <ul>
+    <li><strong>Node.js:</strong> Go to the <a href="https://nodejs.org/en/" target="_blank">Node.js website</a> to download and install Node.js. You can skip this step if you already have it installed. Angular requires Node.js version 8.x or 10.x.</li>
+    <li><strong>Command Line Utility:</strong> There will be some tasks that require a command line.
+      <ul>
+        <li>Windows users can use Command Prompt by hitting the <i>Windows key</i> and typing <code>cmd</code>. You can also download Git Bash  <a href="https://gitforwindows.org/" target="_blank">here</a> which allows users to use linux commands.</li>
+        <li>Macintosh users can use the Terminal by hitting the <i>Command key + Space Bar</i> and typing <code>Terminal</code>.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Getting Started</h2>
+
+  <p>Open your preferred command line utility and make sure you have Node installed by typing <kbd>node -v</kbd>. We will also be using npm which is Node's package manager. It installs with Node by default but just to make sure you can type <kbd>npm -v</kbd>. If you do not get a version for either command, make sure you have Node and npm correctly installed. </p>
+
+  <p>Install Angular's CLI by typing <kbd>npm install -g @angular/cli</kbd>. The <code>-g</code> is a flag that tells npm to install this package globally. You can verify the CLI by typing <kbd>ng version</kbd>.</p>
+
+  <h2>Create An Angular Application</h2>
+
+  <p>Type <kbd>ng new sleep-analyzer-tutorial</kbd> to create an Angular application.</p>
+
+  <p>This command <strong>may</strong> prompt you with features when creating your new application. Select the defaults by pressing the <i>Enter</i> or <i>Return</i> key. Be patient! It may take a few minutes to create the new application. The Angular CLI will be downloading and configuring all of the packages that make up a skeleton application.</p>
+
+  <h2>Serve The Application</h2>
+
+  <p>Navigate into the <i>sleep-analyzer-tutorial</i> folder by typing <kbd>cd sleep-analyzer-tutorial</kbd>.</p>
+
+  <p>Type <kbd>ng serve --open</kbd> to launch a server. As you make changes, the Angular CLI will watch for changes and rebuild the application as well as refresh the browser for you. The <code>--open</code> flag will open a new browser at <a href="http://localhost:4200">http://localhost:4200</a>.</p>
+
+  <h2>Configure Application Style And Layout</h2>
+
+  <p>Let's start by adding Bootstrap. Bootstrap is a frontend component library for developing HTML, CSS and JS. We will use Bootstrap's CDN to load their CSS and JS files.</p>
+
+  <p>Open <code>src/index.html</code> and in the <i>&lt;head&gt;&lt;/head&gt;</i> code block add the following to include the CSS file:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"&gt;
+    </pre>
+  </div>
+
+  <p>At the end of the file before the closing <i>&lt;body&gt;</i> tag, add the following to include the JS files:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"&gt;&lt;/script&gt;
+      &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"&gt;&lt;/script&gt;
+      &lt;script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"&gt;&lt;/script&gt;
+    </pre>
+  </div>
+
+  <h2>Create Data Structure</h2>
+
+  <p>Create some resource modules by typing the following:</p>
+
+  <div class="codeblock">
+    <p>ng generate module resources<br>
+      ng generate module resources/authentication<br>
+      ng generate module resources/body-mass-index</p>
+  </div>
+
+  <h3>Update The ResourceModule</h3>
+
+  <p>Open <code>src/app/resources/resources.module.ts</code> and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;NgModule&#125; from '@angular/core';
+      import &#123;HttpClientModule&#125; from '@angular/common/http';
+
+      import &#123;BodyMassIndexModule&#125; from './body-mass-index/body-mass-index.module';
+      import &#123;AuthenticationModule&#125; from './authentication/authentication.module';
+
+      const modules = [
+        AuthenticationModule,
+        BodyMassIndexModule,
+        HttpClientModule
+      ];
+
+      @NgModule(&#123;
+        imports: [
+          ...modules
+        ],
+        exports: [
+          ...modules
+        ]
+      &#125;)
+      export class ResourcesModule &#123;&#125;</pre>
+  </div>
+
+  <p>We have imported the <code>AuthenticationModule</code> and the <code>BodyMassIndexModule</code> into the <code>ResourcesModule</code> to organize or resources in one place. We will now add our <code>ResourcesModule</code> to our <code>AppModule</code> and by doing so we gain the ability to import any classes imported into those modules anywhere in our application.</p>
+
+  <h3>Update The AppModule</h3>
+
+  <p>Open <code>src/app/app.module.ts</code> and import the <code>ResourcesModule</code> and add it to the <code>imports</code> array.</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;BrowserModule&#125; from '@angular/platform-browser';
+      import &#123;NgModule&#125; from '@angular/core';
+
+      import &#123;AppComponent&#125; from './app.component';
+      import &#123;ResourcesModule&#125; from './resources/resources.module';
+
+      @NgModule(&#123;
+        declarations: [
+          AppComponent
+        ],
+        imports: [
+          BrowserModule,
+          ResourcesModule
+        ],
+        providers: [],
+        bootstrap: [AppComponent]
+      &#125;)
+      export class AppModule &#123;&#125;</pre>
+  </div>
+
+  <h3>Create AuthenticationModule Classes</h3>
+
+  <p>Let's create some other classes for our <code>AuthenticationModule</code>. The <code>--skipTest</code> flag takes a boolean and will dictate if you would like to produce a test file for each class. The <code>--type</code> flag takes a string and will allow you to change the name of the file after the first dot. Example: <kbd>ng generate service someFileName --type=umbrella</kbd> will produce the file name of <code>someFileName.umbrella.ts</code>.</p>
+
+  <p><i>Why are we skipping tests?</i> While testing is important, it is out of the scope of this tutorial. We will not always be skipping the tests but since these folders hold many different classes, we believe seeing them without tests will give you a better understanding of a data resource folder structure.</p>
+
+  <p>When generating the command to create the guard (second line below), you <strong>may</strong> be prompted with options. if you are select the <code>CanActivate</code> option. <code>CanActivate</code> tells the route that it can load if all logic evaluates to true.</p>
+
+  <div class="codeblock">
+    <p>ng generate service resources/authentication/authentication --skipTests=true<br>
+      ng generate guard resources/authentication/authentication --skipTests=true<br>
+      ng generate class resources/authentication/authentication --skipTests=true --type=store<br>
+      ng generate class resources/authentication/authentication --skipTests=true --type=types</p>
+  </div>
+
+  <h3>Update The AuthenticationService</h3>
+
+  <p>In a normal application, authentication management would be the job of a backend server application, but for this sample application, we have to get an access token to attach to our API calls for the body mass index questions and calculation in lieu of a backend server application. Note this is <strong>ONLY</strong> to add security to this sample application and isn't recommended for production environments.</p>
+
+  <p>Open <code>src/app/resources/authentication/authentication.service.ts</code> and replace with the following: </p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;Injectable&#125; from '@angular/core';
+      import &#123;HttpClient, HttpHeaders, HttpParams&#125; from '@angular/common/http';
+
+      import &#123;Observable&#125; from 'rxjs';
+
+      @Injectable()
+      export class AuthenticationService &#123;
+
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _httpClient
+         */
+        constructor(
+          private _httpClient: HttpClient
+        ) &#123;&#125;
+
+        /* -- PUBLIC METHODS -- */
+
+        /**
+         * login
+         * @param body
+         *
+         * This method uses Angular's HttpClient library to perform a post request
+         * and uses Angular's HttpHeaders library to set request headers
+         */
+        public login(body: any): Observable&lt;any&gt; &#123;
+          const httpOptions = &#123;
+            headers: new HttpHeaders(&#123;
+              'Accept': 'application/json',
+              'Cache-Control': 'no-cache',
+              'Content-Type': 'application/x-www-form-urlencoded'
+            &#125;)
+          &#125;
+
+          const formData = new HttpParams(&#123;
+            fromObject : &#123;
+              'client_id': body.client_id,
+              'client_secret': body.client_secret,
+              'grant_type': 'client_credentials'
+            &#125;
+          &#125;);
+
+          const url = 'https://philips-prod.apigee.net/oauth/accessToken';
+
+          return this._httpClient.post&lt;any&gt;(url, formData, httpOptions);
+        &#125;
+      &#125;</pre>
+  </div>
+
+  <p>There are a few things to note here that you will see throughout the application and are standard Angular conventions.</p>
+
+  <p>We use the constructor to inject dependencies into the class. When we do that, we can then access their methods. Here we are injecting Angular's <code>HttpClient</code> library which handles all of the REST calls. TypeScript allows us to make it private and it is good convention to add an underscore before private function names so they are easily recognizable.</p>
+
+  <p>Angular makes use of the RxJS library. Here we are using the <code>Observable</code> class. If we call this from another method, we can then use the <code>Observable.subscribe()</code> function to perform subsequent actions.</p>
+
+  <p>Think of it this way. We call the login method and send out an asynchronous request to the API to get an access token. Since returned an <code>Observable</code>, the caller can subscribe to it and wait for a response. In this case the response it an <code>Observable</code> of <code>HTTPResponse</code> for the request with the response body.</p>
+
+  <h3>Update The Client Type</h3>
+
+  <p>TypeScript gives us the ability to add types to our JavaScript code. This provides static code checking and better development. Replace the code in <code>src/app/resources/authentication/authentication.types.ts</code> with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      export class Client &#123;
+        public client_id: string;
+        public token?: string;
+        public client_secret: string;
+      &#125;</pre>
+  </div>
+
+  <h3>Update The AuthenticationStore</h3>
+
+  <p>Store are singletons which will live the life of the application. The are great places to manage application state, store data structures and reusable functions that can be accessed across the application. Open <code>src/app/resources/authentication/authentication.store.ts</code> and replace the code with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;Injectable&#125; from '@angular/core';
+      import &#123;Subject&#125; from 'rxjs';
+      
+      import &#123;AuthenticationService&#125; from './authentication.service';
+      import &#123;Client&#125; from './authentication.types';
+      
+      @Injectable(&#123;
+        providedIn: 'root'
+      &#125;)
+      export class AuthenticationStore &#123;
+      
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _authenticationServices
+         */
+
+        constructor(
+          private _authenticationService: AuthenticationService,
+        ) &#123;&#125;
+      
+        /* -- EVENTS -- */
+      
+        /**
+         * Create subjects to act as event emitters - Subject extends Observable
+         */
+      
+        private _authenticationEvent = new Subject();
+      
+        /* -- PROPERTIES -- */
+      
+        /**
+         * Create public properties of the event emitter for other components to subscribe to
+         */
+      
+        public authenticationEvent$ = this._authenticationEvent.asObservable();
+      
+        /**
+         * Create properties on the class - stores are singletons so
+         * these properties will be available for life of the app
+         */
+      
+        private _client: Client;
+      
+        /* -- GETTERS -- */
+      
+        /**
+         * Use getters to expose private class properties to other classes
+         */
+      
+        public get client(): Client &#123;
+          return this._client;
+        &#125;
+      
+        /* -- PUBLIC METHODS -- */
+      
+        /**
+         * Login client
+         *
+         * login returns an Observable from AuthenticationServices
+         * that this method can subscribe to
+         *
+         * Once the Observable resolves, the method sets the property to the class and
+         * fires an event to alert listening components who can then query property with getter
+         */
+        public login(login: Client) &#123;
+          this._authenticationService.login(login).subscribe(
+            response => &#123;
+            const client = new Client();
+            client.token = response.access_token;
+            this._client = client;
+      
+            this._authenticationEvent.next();
+            &#125;
+          );
+      
+        &#125;
+      &#125;</pre>
+  </div>
+
+  <p>Here we are setting some properties to the store that we will then be able to access in any other component that we inject the store into.</p>
+
+  <p>We have also created an event listener in our class that can be subscribed to by other components. Here is where we are calling the <code>AuthenticationService.login</code> method and subscribing to the Observable. Once <code>AuthenticationService.login</code> resolves, we create a new client using our <code>Client</code> type we created earlier, and then setting that property on the store.</p>
+
+  <p>When we call <code>this._authenticationEvent.next()</code> we are sending out an event to all components subscribed that this method is complete.</p>
+
+  <h3>Update The AuthenticationGuard</h3>
+
+  <p>Let's create a route guard. Our route guard will be used in our routing and will ensure that conditions are met before loading our route. This is helpful when checking that certain permissions exist which is what we will be doing here. Before we allow the client to go to the body-mass-index route we will create, we must ensure they have authenticated and received the API access token.</p>
+
+  <p>Open <code>src/app/resources/authentication/authentication.guard.ts</code> and replace the code with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;Injectable&#125; from '@angular/core';
+      import &#123;Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot&#125; from '@angular/router';
+
+      import &#123;AuthenticationStore&#125; from './authentication.store';
+
+      @Injectable(&#123;
+        providedIn: 'root'
+      &#125;)
+      export class AuthenticationGuard implements CanActivate &#123;
+
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _authenticationStore
+         * @param _router
+         */
+        constructor(
+          private _router: Router,
+          private _authenticationStore: AuthenticationStore
+        ) &#123;&#125;
+
+        /* -- PUBLIC METHODS -- */
+
+        /**
+         * canActivate return a boolean if conditions are not met
+         * Add this to your routes canActivate property to prevent route access
+         * @param route
+         * @param state
+         */
+        canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) &#123;
+          if (this._authenticationStore.client) &#123;
+            return true;
+          &#125;
+
+          this._router.navigate(['/login']);
+          return false;
+        &#125;
+      &#125;</pre>
+  </div>
+
+  <h3>Add The AuthenticationService To The AuthenticationModule</h3>
+
+  <p>Finally let's add the <code>AuthenticationService</code> to our <code>src/app/resources/authentication/authentication.module.ts</code> by adding it to our <code>provides</code> array. By doing so, this will expose our AuthenticationService to our entire application.</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;NgModule&#125; from '@angular/core';
+
+      import &#123;AuthenticationService&#125; from './authentication.service';
+
+      @NgModule(&#123;
+        providers: [
+          AuthenticationService
+        ]
+      &#125;)
+      export class AuthenticationModule &#123;&#125;</pre>
+  </div>
+
+  <h3>Create Question Type</h3>
+
+  <p>Just like our <code>Client</code> type, we are going to create a <code>Question</code> type.</p>
+
+  <div class="codeblock">
+    <p>ng generate class resources/questions/questions --skipTests=true --type=types</p>
+  </div>
+
+  <p>Replace the code in <code>src/app/resources/question/question.types.ts</code> with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      export class Question &#123;
+        public id: string;
+        public type: string;
+        public computed: boolean;
+        public sleepProblem: boolean;
+        public dependencies: [];
+        public questionText: string;
+      &#125;</pre>
+  </div>
+
+  <h3>Create BodyMassIndexModule Classes</h3>
+
+  <div class="codeblock">
+    <p>ng generate service resources/body-mass-index/body-mass-index --skipTests=true<br>
+      ng generate class resources/body-mass-index/body-mass-index --skipTests=true --type=store</p>
+  </div>
+
+  <h3>Update The BodyMassIndexService</h3>
+
+  <p>Open <code>src/app/resources/body-mass-index/body-mass-index.service.ts</code> and replace with the following: </p>
+  
+  <div class="codeblock">
+    <pre>
+      import &#123;Injectable&#125; from '@angular/core';
+      import &#123;HttpClient, HttpHeaders&#125; from '@angular/common/http';
+      import &#123;Observable&#125; from 'rxjs';
+
+      import &#123;AuthenticationStore&#125; from '../authentication/authentication.store';
+      
+      @Injectable()
+      export class BodyMassIndexService &#123;
+      
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _httpClient
+         */
+        constructor(
+          private _authenticationStore: AuthenticationStore,
+          private _httpClient: HttpClient
+        ) &#123;&#125;
+      
+        /* -- PUBLIC METHODS -- */
+      
+        /**
+         * retrieveBodyMassIndexQuestions
+         *
+         * This method uses Angular's HttpClient library to perform a get request
+         */
+        public retrieveBodyMassIndexQuestions(): Observable&lt;any&gt; &#123;
+          const httpOptions = &#123;
+            headers: new HttpHeaders(&#123;
+              'Authorization': 'Bearer ' + this._authenticationStore.client.token
+            &#125;)
+          &#125;;
+
+          const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/GetRequiredQuestionSenses/bmi';
+      
+          return this._httpClient.get&lt;any&gt;(url, httpOptions);
+        &#125;
+      
+        /**
+         * retrieveBodyMassIndexQuestions
+         * @param body
+         *
+         * This method uses Angular's HttpClient library to perform a post request
+         * and uses Angular's HttpHeaders library to set request headers
+         */
+        public postBodyMassIndexAnswers(body: &#123;&#125;): Observable&lt;any&gt; &#123;
+          const httpOptions = &#123;
+            headers: new HttpHeaders(&#123;
+              'Accept': 'application/json',
+              'Cache-Control': 'no-cache',
+              'Content-Type':  'application/json',
+              'Authorization': 'Bearer ' + this._authenticationStore.client.token
+            &#125;)
+          &#125;;
+
+          const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/ComputeSense/bmi';
+      
+          return this._httpClient.post&lt;any&gt;(url, body, httpOptions);
+        &#125;
+        
+      &#125;</pre>
+  </div>
+
+  <p>We are doing many similar things in this service as we did in the <code>AuthenticationService</code>. One thing to point out however is how we are using dependency injection to retrieve our access token. We use a <i>getter</i> in our <code>AuthenticationStore</code> to retrieve the access token with <code>this._authenticationStore.client.token</code>.</p>
+
+  <h3>Update The BodyMassIndexStore</h3>
+
+  <p>Open <code>src/app/resources/body-mass-index/body-mass-index.store.ts</code> and replace with the following:</p>
+  
+  <div class="codeblock">
+    <pre>
+      import &#123;Injectable&#125; from '@angular/core';
+      import &#123;Subject&#125; from 'rxjs';
+      
+      import &#123;BodyMassIndexService&#125; from './body-mass-index.service';
+      import &#123;Question&#125; from '../questions/questions.types';
+      
+      @Injectable(&#123;
+        providedIn: 'root'
+      &#125;)
+      export class BodyMassIndexStore &#123;
+      
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _bodyMassIndexService
+         */
+
+        constructor(
+          private _bodyMassIndexService: BodyMassIndexService
+        ) &#123;&#125;
+      
+        /* -- EVENTS -- */
+      
+        /**
+         * Create subjects to act as event emitters - Subject extends Observable
+         */
+      
+        private _postAnswersEvent = new Subject();
+        private _questionsUpdatedEvent = new Subject();
+      
+        /* -- PROPERTIES -- */
+      
+        /**
+         * Create public properties of the event emitter for other components to subscribe to
+         */
+      
+        public postAnswersEvent$ = this._postAnswersEvent.asObservable();
+        public questionsUpdatedEvent$ = this._questionsUpdatedEvent.asObservable();
+      
+        /**
+         * Create properties on the class - stores are singletons so
+         * these properties will be available for life of the app
+         */
+      
+        private _bmiCalculation: number;
+        private _questions: Question[];
+      
+        /* -- GETTERS -- */
+      
+        /**
+         * Use getters to expose private class properties to other classes
+         */
+      
+        public get bmiCalculation(): number &#123;
+          return this._bmiCalculation;
+        &#125;
+      
+        public get questions(): Question[] &#123;
+          return this._questions;
+        &#125;
+      
+        /* -- PUBLIC METHODS -- */
+      
+        /**
+         * Get list of questions
+         *
+         * retrieveBodyMassIndexQuestions returns an Observable from BodyMassIndexServices
+         * that this method can subscribe to
+         *
+         * Once the Observable resolves, the method sets the property to the class and
+         * fires an event to alert listening components who can then query property with getter
+         */
+        public retrieveBodyMassIndexQuestions(): void &#123;
+          this._bodyMassIndexService.retrieveBodyMassIndexQuestions().subscribe(
+            response => &#123;
+            this._questions = response;
+            this._questionsUpdatedEvent.next();
+            &#125;
+          );
+        &#125;
+      
+        /**
+         * Submit answer list
+         *
+         * postBodyMassIndexAnswers returns an Observable from BodyMassIndexServices
+         * that this method can subscribe to
+         *
+         * Once the Observable resolves, the method sets the property to the class and
+         * fires an event to alert listening components who can then query property with getter
+         */
+        public postBodyMassIndexAnswers(body: &#123;&#125;): void &#123;
+          this._bodyMassIndexService.postBodyMassIndexAnswers(body).subscribe(
+            response => &#123;
+            this._bmiCalculation = response.bmi;
+            this._postAnswersEvent.next();
+            &#125;
+          );
+        &#125;
+      
+      &#125;</pre>
+  </div>
+
+  <p>Again we are doing many of the same things we did in the <code>AuthenticationStore</code>. We have two methods that call methods in our <code>BodyMassIndexService</code> and once resolved emit and event out to listening components.  In this case it is our <code>Body MassIndexComponent</code> which we create here soon. It should be noted that many components can listen to events and update at the same time using this subscription model.</p>
+
+  <h3>Add The BodyMassIndexService To The BodyMassIndexModule</h3>
+
+  <p>Finally let's add the <code>BodyMassIndexService</code> to our <code>src/app/resources/body-mass-index/body-mass-index.module.ts</code> by adding it to our <code>provides</code> array. By doing so, this will expose our BodyMassIndexService to our entire application.</p>
+  
+  <div class="codeblock">
+    <pre>
+      import &#123;NgModule&#125; from '@angular/core';
+
+      import &#123;BodyMassIndexService&#125; from './body-mass-index.service';
+      
+      @NgModule(&#123;
+        providers: [
+          BodyMassIndexService
+        ]
+      &#125;)
+      export class BodyMassIndexModule &#123;&#125;</pre>
+  </div>
+
+  <h2>Create Application Components</h2>
+
+  <p>From Angular docs (edited): A component controls a patch of screen called a view. You define a component's application logic — what it does to support the view — inside a class. The class interacts with the view through an API of properties and methods.</p>
+
+  <p>Create the following components:</p>
+
+  <div class="codeblock">
+    <p>ng generate component components/body-mass-index<br>
+      ng generate component components/home<br>
+      ng generate component components/login</p>
+  </div>
+
+  <p>This will create a component folder with an Angular component, .html, .css and a test .spec file. Now that we have our data ready to consume, we can start to create our views to display the information to the client.</p>
+
+  <h2>Create The AppRoutingModule</h2>
+
+  <div class="codeblock">
+    <p>ng generate module app-routing --flat --module=app</p>
+  </div>
+
+  <p>The <code>--flat</code> flag creates the module without a folder and the <code>--module</code> flag tells the Angular CLI to add it to the <code>imports</code> array in the <code>AppModule</code>.</p>
+
+  <p>Angular's built in router allows us to create different routes that a client can access within their browser. Here you can see our <code>AuthenticationGuard</code> at work. All other routes are open but clients will not be able to access the <i>body-mass-index</i> route unless the <code>AuthenticationGuard</code> resolves.</p>
+
+  <p>Open <code>src/app/app-routing.module.ts</code> and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;NgModule&#125; from '@angular/core';
+      import &#123;RouterModule, Routes&#125; from '@angular/router';
+      
+      import &#123;BodyMassIndexComponent&#125; from './components/body-mass-index/body-mass-index.component';
+      import &#123;HomeComponent&#125; from './components/home/home.component';
+      import &#123;LoginComponent&#125; from './components/login/login.component';
+      import &#123;AuthenticationGuard&#125; from './resources/authentication/authentication.guard';
+      
+      /**
+       * Create routes here and inject into RouterModule below in imports
+       */
+      const routes: Routes = [
+        &#123;
+          path: '',
+          redirectTo: '/',
+          pathMatch: 'full'
+        &#125;,
+        &#123;
+          path: '',
+          component: HomeComponent
+        &#125;,
+        &#123;
+          path: 'body-mass-index',
+          canActivate: [AuthenticationGuard],
+          component: BodyMassIndexComponent
+        &#125;,
+        &#123;
+          path: 'login',
+          component: LoginComponent
+        &#125;
+      ];
+      
+      @NgModule(&#123;
+        exports: [
+          RouterModule
+        ],
+        imports: [
+          RouterModule.forRoot(routes, &#123;
+            scrollPositionRestoration: 'enabled',
+            anchorScrolling: 'enabled',
+            scrollOffset: [0, 0]
+          &#125;)
+        ],
+        providers: []
+      &#125;)
+      export class AppRoutingModule &#123;&#125;</pre>
+  </div>
+
+  <h3>Add The AppRoutingModule To AppModule</h3>
+
+  <p>Open <code>src/app/app.module.ts</code> and replace the code with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;BrowserModule&#125; from '@angular/platform-browser';
+      import &#123;NgModule&#125; from '@angular/core';
+      import &#123;ReactiveFormsModule&#125; from '@angular/forms';
+      import &#123;RouterModule&#125; from '@angular/router';
+      
+      import &#123;AppRoutingModule&#125; from './app-routing.module';
+      
+      import &#123;AppComponent&#125; from './app.component';
+      import &#123;BodyMassIndexComponent&#125; from './components/body-mass-index/body-mass-index.component';
+      import &#123;HomeComponent&#125; from './components/home/home.component';
+      import &#123;LoginComponent&#125; from './components/login/login.component';
+      import &#123;ResourcesModule&#125; from './resources/resources.module';
+      
+      @NgModule(&#123;
+        declarations: [
+          AppComponent,
+          BodyMassIndexComponent,
+          HomeComponent,
+          LoginComponent
+        ],
+        exports: [
+          ReactiveFormsModule,
+          RouterModule
+        ],
+        imports: [
+          AppRoutingModule,
+          BrowserModule,
+          ResourcesModule,
+          ReactiveFormsModule,
+          RouterModule
+        ],
+        providers: [],
+        bootstrap: [
+          AppComponent
+        ]
+      &#125;)
+      export class AppModule &#123;&#125;</pre>
+  </div>
+
+  <p>You might have noticed that we have snuck a few extra modules in here. We need to import and export the <code>ReactiveFormModule</code> and the <code>RouterModule</code> so that other components in our application can use them.</p>
+
+  <h2>Update The AppComponent Template</h2>
+
+  <p>Open <code>src/app/app.component.html</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+        &lt;!-- routerLink is Angular's Router link syntax --&gt;
+        &lt;a
+          class="navbar-brand"
+          routerLink="/"&gt;
+          Philips SmartSleep Analyzer Sample Application
+        &lt;/a&gt;
+
+        &lt;button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"&gt;
+          &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+
+        &lt;div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"&gt;
+
+          &lt;ul class="navbar-nav ml-auto"&gt;
+            &lt;li class="nav-item"&gt;
+              &lt;!-- routerLink is Angular's Router link syntax --&gt;
+              &lt;a
+                class="nav-link"
+                routerLink="/"&gt;
+                Home
+              &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+              &lt;!-- routerLink is Angular's Router link syntax --&gt;
+              &lt;a
+                class="nav-link"
+                routerLink="/body-mass-index">
+                Body Mass Index
+              &lt;/a&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/nav&gt;
+
+      &lt;!-- Angular's Router uses this syntax to render routes --&gt;
+      &lt;router-outlet&gt;&lt;/router-outlet&gt;
+    </pre>
+  </div>
+
+  <p>We have added a boilerplate Bootstrap navigation bar and provided it a couple links. Notice that they are not using the <code>href</code> attribute but rather the <code>RouterModule</code>'s <code>routerLink</code> attribute. This allows the our routing to take effect which doesn't trigger a reload when navigating between routes. This way our data in our stores and components persist and we don't have to make a bunch of extra API calls every time we move to a new route</p>
+
+  <p>The <code>&lt;router-link&gt;&lt;/router-link&gt;</code> element is where the router loads those components that we defined as the component for the route.</p>
+
+  <h2>LoginComponent</h2>
+
+  <h3 class="mt-3">Update The LoginComponent</h3>
+
+  <p>Open <code>src/app/components/login/login.component.ts</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;Component, OnInit&#125; from '@angular/core';
+      import &#123;Router&#125; from '@angular/router';
+      import &#123;FormControl, FormGroup, Validators&#125; from '@angular/forms';
+      
+      import &#123;AuthenticationStore&#125; from '../../resources/authentication/authentication.store';
+      
+      @Component(&#123;
+        selector: 'app-login',
+        templateUrl: './login.component.html',
+        styleUrls: ['./login.component.css']
+      &#125;)
+      export class LoginComponent implements OnInit &#123;
+      
+        /* -- CONSTRUCTOR -- */
+      
+        constructor(
+          private _router: Router,
+          private _authenticationStore: AuthenticationStore
+        ) &#123;&#125;
+      
+        /* -- PROPERTIES -- */
+      
+        public form;
+        public loading = false;
+      
+        private _controls = &#123;
+          client_id: new FormControl('', Validators.required),
+          client_secret: new FormControl('', Validators.required),
+          grant_type: new FormControl('client_credentials')
+        &#125;;
+      
+        /* -- PUBLIC METHODS -- */
+      
+        public ngOnInit(): void &#123;
+          this._authenticationStore.authenticationEvent$.subscribe(() => this._redirectAfterLogin());
+          this.form = new FormGroup(this._controls, &#123; updateOn: 'change' &#125;);
+      
+          if (this._authenticationStore.client) &#123;
+            this._redirectAfterLogin();
+          &#125;
+        &#125;
+      
+        public onSubmit(): void &#123;
+          if (this.form.invalid) &#123;
+            return;
+          &#125;
+          this.loading = true;
+          this._authenticationStore.login(this.form.value);
+        &#125;
+      
+        /* -- PRIVATE METHODS -- */
+      
+        private _redirectAfterLogin() &#123;
+          this.loading = false;
+          this._router.navigateByUrl('/body-mass-index');
+        &#125;
+      
+      &#125;</pre>
+  </div>
+
+  <p>You are probably starting to see a lot of patterns by now. We have our constructor injecting the <code>Router</code> module and the <code>AuthenticationStore</code>.</p>
+
+  <p>We are going to use Angular's <code>ReactiveFormModule</code> here to create a form model that our class can track. Angular has very powerful form controls as part of its core and we are going to tap into that power. We create some simple form controls for a login form.</p>
+
+  <p>Angular comes with lifecycle methods that a component will go through as it is instantiated and destroyed. Probably the most popular is the <code>ngOnInit</code> method. We put logic that we want to happen when a component is first mounted. Here we are checking for a few things. First we subscribe to our <code>AuthenticationStore</code> event that gets fired when the login action completes. This subscription takes a callback.</p>
+
+  <p>The <code>_redirectAfterLogin()</code> method redirects client to our body-mass-index route after successful login.</p>
+
+  <p>We also create our form in <code>ngOnInit</code> as well as check if the client is already logged in.  If so we just take them right away to our authenticated route. Remember earlier we used the <code>AuthenticationGuard</code> as another protection for our route.</p>
+
+  <p>"Client ID" becomes client_id in the request, which is provided via the "Key" field of an API Key in developer portal. "Client Secret" becomes client_secret in the request, which is provided via the "Secret" field of an API Key in the developer portal.</p>
+
+  <h3>Update The LoginComponent Template</h3>
+
+  <p>Open <code>src/app/components/login/login.component.html</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;div class="container"&gt;
+
+        &lt;div class="row"&gt;
+          &lt;div class="col-md-6 offset-md-3"&gt;
+
+            &lt;h1 class="mt-5"&gt;Login&lt;/h1&gt;
+
+            &lt;p&gt;"Client ID" becomes client_id in the request, which is provided via the "Key" field of an API Key in developer portal. "Client Secret" becomes client_secret in the request, which is provided via the "Secret" field of an API Key in the developer portal.&lt;/p&gt;
+
+            &lt;!-- apply form property from class to [formGroup] directive to keep form properties in sync with class --&gt;
+            &lt;!-- use Angular's (ngSubmit) method to submit form - onSubmit() must exist in class --&gt;
+            &lt;form
+              class="login-form"
+              [formGroup]="form"
+              (ngSubmit)="onSubmit()"
+              class="mt-4"&gt;
+
+              &lt;!-- [formControlName] maps the input to the class FormControl element in the FormGroup --&gt;
+              &lt;div class="form-group"&gt;
+                &lt;label&gt;Client ID&lt;/label&gt;
+                &lt;input
+                  formControlName="client_id"
+                  class="form-control"&gt;
+              &lt;/div>
+
+              &lt;!-- [formControlName] maps the input to the class FormControl element in the FormGroup --&gt;
+              &lt;div class="form-group"&gt;
+                &lt;label>Client Secret&lt;/label&gt;
+                &lt;input
+                  formControlName="client_secret"
+                  class="form-control"
+                  type="password"&gt;
+              &lt;/div&gt;
+
+              &lt;!-- [disabled] is an Angular directive that will add the html disabled attribute if condition is true --&gt;
+              &lt;button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="form.invalid || loading"&gt;
+                &lt;span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"&gt;
+                &lt;/span&gt;
+                Login
+              &lt;/button&gt;
+
+            &lt;/form&gt;
+
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+      &lt;/div&gt;</pre>
+  </div>
+
+  <p>You will see here that we are using our <code>LoginComponent</code>'s form property on our form element with Angular's <code>[formGroup]</code> directive. This assigns the form model we created in the component to the form elements by including the <code>[formGroupName]</code> directive on each form element.</p>
+
+  <h3>Update The LoginComponent Styles</h3>
+
+  <p>Open <code>src/app/components/login/login.component.css</code> file and replace with the following code:</p>
+
+  <div class="codeblock">
+    <pre>
+      .login-form &#123;
+        width: 100%;
+      &#125;
+    </pre>
+  </div>
+
+  <h2 class="mt-3">HomeComponent</h2>
+
+  <h3>Update The HomeComponent Template</h3>
+
+  <p>Open <code>src/app/components/home/home.component.html</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;div class="container pb-lg-5"&gt;
+        &lt;div class="jumbotron mt-5"&gt;
+          &lt;h1 class="display-4"&gt;Philips SmartSleep Analyzer Sample Application&lt;/h1&gt;
+          &lt;p class="lead"&gt;This application is built in &lt;a href="https://angular.io" target="_blank"&gt;Angular&lt;/a&gt; 7 using Angular's &lt;a href="https://cli.angular.io" target="_blank"&gt;CLI&lt;/a&gt; tool, &lt;a href="http://es6-features.org" target="_blank"&gt;ES6&lt;/a&gt; and &lt;a href="https://www.typescriptlang.org" target="_blank"&gt;TypeScript&lt;/a&gt;. &lt;a href="https://getbootstrap.com" target="_blank"&gt;Bootstrap&lt;/a&gt; will be used for our HTML and CSS.&lt;/p&gt;
+          &lt;hr class="my-4"&gt;
+          &lt;p>Click the button below to see a demo of the tutorial.&lt;/p&gt;
+          &lt;a class="btn btn-primary btn-lg" routerLink="/body-mass-index" role="button">See It In Action!&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    </pre>
+  </div>
+
+  <h2>BodyMassIndexComponent</h2>
+
+  <h3 class="mt-3">Update The BodyMassIndexComponent</h3>
+
+  <p>Open <code>src/app/components/body-mass-index/body-mass-index.component.ts</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      import &#123;Component, OnInit&#125; from '@angular/core';
+      import &#123;FormControl, FormGroup, Validators&#125; from '@angular/forms';
+      
+      import &#123;BodyMassIndexStore&#125; from '../../resources/body-mass-index/body-mass-index.store';
+      import &#123;Question&#125; from '../../resources/questions/questions.types';
+      
+      @Component(&#123;
+        selector: 'app-body-mass-index',
+        templateUrl: './body-mass-index.component.html',
+        styleUrls: ['./body-mass-index.component.css']
+      &#125;)
+      export class BodyMassIndexComponent implements OnInit &#123;
+      
+        /* -- CONSTRUCTOR -- */
+
+        /**
+         * Inject any class dependencies that will be used in the class
+         * @param _bodyMassIndexServices
+         */
+
+        constructor(
+          private _bodyMassIndexStore: BodyMassIndexStore
+        ) &#123;&#125;
+      
+        /* -- PROPERTIES -- */
+      
+        /**
+         * Create properties on the class - these properties will
+         * be available for life of the component
+         *
+         * Any public properties are available in the view
+         */
+      
+        public bmiCalculation = '--';
+        public form: FormGroup;
+        public loading = true;
+        public questions: Question[] = [];
+        public submitting = false;
+      
+        /* -- PUBLIC METHODS -- */
+      
+        /**
+         * ngOnInit is an Angular lifecycle method
+         *
+         * Subscribe to events and perform any logic that should happen
+         * when the component loads
+         */
+        public ngOnInit(): void &#123;
+          // once the answers are posted and response is returned, execute callback
+          this._bodyMassIndexStore.postAnswersEvent$.subscribe(() => this._getBmiCalculation());
+      
+          // once the questions are retrieve and response is returned, execute callback
+          this._bodyMassIndexStore.questionsUpdatedEvent$.subscribe(() => this._getQuestions());
+      
+          // when component loads, retrieve questions
+          this._bodyMassIndexStore.retrieveBodyMassIndexQuestions();
+        &#125;
+      
+        /**
+         * Submit form
+         */
+        public onSubmit(): void &#123;
+          this.submitting = true;
+          this._bodyMassIndexStore.postBodyMassIndexAnswers(this.form.value);
+        &#125;
+      
+        /* -- PRIVATE METHODS -- */
+      
+        /**
+         * Retrieve bmiCalculation and set on class property
+         * @private
+         */
+        private _getBmiCalculation(): void &#123;
+          this.submitting = false;
+          this.bmiCalculation = (Math.round(this._bodyMassIndexStore.bmiCalculation * 10) / 10) + '%';
+        &#125;
+      
+        /**
+         * Retrieve questions and set on class property and create the form
+         * @private
+         */
+        private _getQuestions(): void &#123;
+          this.questions = this._bodyMassIndexStore.questions;
+          this._createForm();
+        &#125;
+      
+        /**
+         * Create reactive form elements using Angular's ReactiveFormsModule
+         * @private
+         */
+        private _createForm(): void &#123;
+          const controlObject = &#123;&#125;;
+      
+          // loop through questions and create a FormControl for each element and add required validation
+          // FormControl's are mapped to the view by adding their key (controlObject[question.id]) to
+          // the [formControlName] directive: example - &lt;input [formControlName]="question.id"&gt;
+          this.questions.forEach(
+            question => controlObject[question.id] = new FormControl('', Validators.required)
+          );
+      
+          // create a FormGroup to track the form in the view
+          this.form = new FormGroup(controlObject, &#123; updateOn: 'change' &#125;);
+      
+          // loading is set to false to stop the spinner and show the form
+          this.loading = false;
+        &#125;
+      
+      &#125;
+
+    </pre>
+  </div>
+
+  <p>Here again there are a lot of similar patterns to our <code>LoginComponent</code>. We set up some event listeners in our <code>ngOnInit</code> method and also send off a call to get our questions.</p>
+
+  <p>Once our events listeners fire their callbacks, we execute either creating the form after we get the questions or showing the body mass index calculation.</p>
+
+  <h3>Update The BodyMassIndexComponent Template</h3>
+
+  <p>Open <code>src/app/components/body-mass-index/body-mass-index.component.html</code> file and replace with the following:</p>
+
+  <div class="codeblock">
+    <pre>
+      &lt;div class="container"&gt;
+
+        &lt;div
+          *ngIf="loading"
+          class="d-flex justify-content-center align-items-center"
+          [ngStyle]="&#123; height: 'calc(100vh - 100px)' &#125;"&gt;
+          &lt;div
+            class="spinner-border text-primary"
+            role="status"&gt;
+            &lt;span class="sr-only"&gt;Loading...&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- *ngIf = only show element if condition exists --&gt;
+        &lt;div
+          *ngIf="questions.length"
+          class="row"&gt;
+          &lt;div class="col-md-6 offset-md-3"&gt;
+
+            &lt;h2 class="mt-5"&gt;&lt;i&gt;Note: the Scoring API uses metric units for all calculations by default.&lt;/i&gt;&lt;/h2&gt;
+
+            &lt;!-- apply form property from class to [formGroup] directive to keep form properties in sync with class --&gt;
+            &lt;!-- use Angular's (ngSubmit) method to submit form - onSubmit() must exist in class --&gt;
+            &lt;form
+              [formGroup]="form"
+              (ngSubmit)="onSubmit()"
+              class="mt-5"&gt;
+
+              &lt;!-- loop through questions and create inputs --&gt;
+              &lt;div
+                *ngFor="let question of questions"
+                class="form-group"&gt;
+
+                &lt;!-- [for] is Angular syntax for the html for attribute --&gt;
+                &lt;label [for]="question.id"&gt; &lt;span [innerHTML]="question.questionText"&gt;&lt;/span&gt;&lt;/label&gt;
+
+                &lt;!-- [id] is Angular syntax for the html id attribute --&gt;
+                &lt;!-- [formControlName] maps the input to the class FormControl element in the FormGroup --&gt;
+                &lt;input
+                  *ngIf="question.type === 'DoubleSenseValue'"
+                  type="number"
+                  class="form-control"
+                  [id]="question.id"
+                  [formControlName]="question.id"&gt;
+              &lt;/div&gt;
+
+              &lt;!-- [disabled] is an Angular directive that will add the html disabled attribute if condition is true --&gt;
+              &lt;button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="form.invalid || submitting"&gt;
+                &lt;span
+                  *ngIf="submitting"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"&gt;
+                &lt;/span&gt;
+                Submit
+              &lt;/button&gt;
+
+            &lt;/form&gt;
+
+            &lt;h4 class="mt-5"&gt;Body Mass Index Calculation: &lt;span [innerHTML]="bmiCalculation"&gt;&lt;/span&gt;&lt;/h4&gt;
+
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+      &lt;/div&gt;</pre>
+  </div>
+
+  <p>This has a lot of the same patterns as out <code>LoginComponent Template</code>. The difference here is that we don't know what our form elements are going to be so we use Angular's <code>*ngFor</code> directive to loop through our question array and create the form dynamically.</p>
+
+  <p>One thing to note, generally you would display class properties between double curly braces, however we use the <code>[innerHTML]</code> directive just in case the return information contains some markup or style.</p>
+
+  <h2>We Are Finished!</h2>
+
+  <h3 class="mt-3">Let's Give It A Go</h3>
+
+  <p>Click on the Body Mass Index link in the header on the right and you will be taken to the login page. Here you will enter your credentials. Click submit and be patient, it may take a few seconds to authenticate your account.</p>
+
+  <p>Once logged in you will be redirected to the body-mass-index route.  From there you can enter your information in the Body Mass Index form to calculate your Body Mass Index.</p>
+
+</div>

@@ -1,0 +1,54 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+      <h1 class="mt-5">Login</h1>
+
+      <p>"Client ID" becomes client_id in the request, which is provided via the "Key" field of an API Key in developer portal. "Client Secret" becomes client_secret in the request, which is provided via the "Secret" field of an API Key in the developer portal.</p>
+
+      <!-- apply form property from class to [formGroup] directive to keep form properties in sync with class -->
+      <!-- use Angular's (ngSubmit) method to submit form - onSubmit() must exist in class -->
+      <form
+        class="login-form"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="mt-4">
+
+        <!-- [formControlName] maps the input to the class FormControl element in the FormGroup -->
+        <div class="form-group">
+          <label>Client ID</label>
+          <input
+            formControlName="client_id"
+            class="form-control">
+        </div>
+
+        <!-- [formControlName] maps the input to the class FormControl element in the FormGroup -->
+        <div class="form-group">
+          <label>Client Secret</label>
+          <input
+            formControlName="client_secret"
+            class="form-control"
+            type="password">
+        </div>
+
+        <!-- [disabled] is an Angular directive that will add the html disabled attribute if condition is true -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || loading">
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true">
+          </span>
+          Login
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+</div>

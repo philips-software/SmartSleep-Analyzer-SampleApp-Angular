@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* tutorial styles */
+
+.codeblock {
+  background-color: #212529;
+  border-radius: 4px;
+  padding: 20px 0;
+  margin: 20px auto;
+  width: 100%;
+  color: white;
+}
+
+.codeblock pre {
+  color: lawngreen;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0 0 20px 0;
+}
+
+.codeblock pre:last-of-type {
+  margin: 0;
+}
+
+.codeblock p {
+  font-size: 14px;
+  line-height: 18px;
+  padding-left: 47px;
+  margin-bottom: 20px;
+}
+
+.codeblock p:last-of-type {
+  margin-bottom: 0;
+}
+
+h3 {
+  color: #555;
+  margin-top: 60px;
+}
