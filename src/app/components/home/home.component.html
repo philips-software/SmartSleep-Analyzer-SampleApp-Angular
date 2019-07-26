@@ -211,7 +211,7 @@
             &#125;
           &#125;);
 
-          const url = 'https://philips-prod.apigee.net/oauth/accessToken';
+          const url = 'https://www.sleepapi.philips.com/oauth/accessToken';
 
           return this._httpClient.post&lt;any&gt;(url, formData, httpOptions);
         &#125;
@@ -247,15 +247,15 @@
     <pre>
       import &#123;Injectable&#125; from '@angular/core';
       import &#123;Subject&#125; from 'rxjs';
-      
+
       import &#123;AuthenticationService&#125; from './authentication.service';
       import &#123;Client&#125; from './authentication.types';
-      
+
       @Injectable(&#123;
         providedIn: 'root'
       &#125;)
       export class AuthenticationStore &#123;
-      
+
         /* -- CONSTRUCTOR -- */
 
         /**
@@ -266,42 +266,42 @@
         constructor(
           private _authenticationService: AuthenticationService,
         ) &#123;&#125;
-      
+
         /* -- EVENTS -- */
-      
+
         /**
          * Create subjects to act as event emitters - Subject extends Observable
          */
-      
+
         private _authenticationEvent = new Subject();
-      
+
         /* -- PROPERTIES -- */
-      
+
         /**
          * Create public properties of the event emitter for other components to subscribe to
          */
-      
+
         public authenticationEvent$ = this._authenticationEvent.asObservable();
-      
+
         /**
          * Create properties on the class - stores are singletons so
          * these properties will be available for life of the app
          */
-      
+
         private _client: Client;
-      
+
         /* -- GETTERS -- */
-      
+
         /**
          * Use getters to expose private class properties to other classes
          */
-      
+
         public get client(): Client &#123;
           return this._client;
         &#125;
-      
+
         /* -- PUBLIC METHODS -- */
-      
+
         /**
          * Login client
          *
@@ -317,11 +317,11 @@
             const client = new Client();
             client.token = response.access_token;
             this._client = client;
-      
+
             this._authenticationEvent.next();
             &#125;
           );
-      
+
         &#125;
       &#125;</pre>
   </div>
@@ -431,7 +431,7 @@
   <h3>Update The BodyMassIndexService</h3>
 
   <p>Open <code>src/app/resources/body-mass-index/body-mass-index.service.ts</code> and replace with the following: </p>
-  
+
   <div class="codeblock">
     <pre>
       import &#123;Injectable&#125; from '@angular/core';
@@ -439,10 +439,10 @@
       import &#123;Observable&#125; from 'rxjs';
 
       import &#123;AuthenticationStore&#125; from '../authentication/authentication.store';
-      
+
       @Injectable()
       export class BodyMassIndexService &#123;
-      
+
         /* -- CONSTRUCTOR -- */
 
         /**
@@ -453,9 +453,9 @@
           private _authenticationStore: AuthenticationStore,
           private _httpClient: HttpClient
         ) &#123;&#125;
-      
+
         /* -- PUBLIC METHODS -- */
-      
+
         /**
          * retrieveBodyMassIndexQuestions
          *
@@ -468,11 +468,11 @@
             &#125;)
           &#125;;
 
-          const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/GetRequiredQuestionSenses/bmi';
-      
+          const url = 'https://www.sleepapi.philips.com/smartsleep-analyzer/Scoring/GetRequiredQuestionSenses/bmi';
+
           return this._httpClient.get&lt;any&gt;(url, httpOptions);
         &#125;
-      
+
         /**
          * retrieveBodyMassIndexQuestions
          * @param body
@@ -490,11 +490,11 @@
             &#125;)
           &#125;;
 
-          const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/ComputeSense/bmi';
-      
+          const url = 'https://www.sleepapi.philips.com/smartsleep-analyzer/Scoring/ComputeSense/bmi';
+
           return this._httpClient.post&lt;any&gt;(url, body, httpOptions);
         &#125;
-        
+
       &#125;</pre>
   </div>
 
@@ -503,20 +503,20 @@
   <h3>Update The BodyMassIndexStore</h3>
 
   <p>Open <code>src/app/resources/body-mass-index/body-mass-index.store.ts</code> and replace with the following:</p>
-  
+
   <div class="codeblock">
     <pre>
       import &#123;Injectable&#125; from '@angular/core';
       import &#123;Subject&#125; from 'rxjs';
-      
+
       import &#123;BodyMassIndexService&#125; from './body-mass-index.service';
       import &#123;Question&#125; from '../questions/questions.types';
-      
+
       @Injectable(&#123;
         providedIn: 'root'
       &#125;)
       export class BodyMassIndexStore &#123;
-      
+
         /* -- CONSTRUCTOR -- */
 
         /**
@@ -527,49 +527,49 @@
         constructor(
           private _bodyMassIndexService: BodyMassIndexService
         ) &#123;&#125;
-      
+
         /* -- EVENTS -- */
-      
+
         /**
          * Create subjects to act as event emitters - Subject extends Observable
          */
-      
+
         private _postAnswersEvent = new Subject();
         private _questionsUpdatedEvent = new Subject();
-      
+
         /* -- PROPERTIES -- */
-      
+
         /**
          * Create public properties of the event emitter for other components to subscribe to
          */
-      
+
         public postAnswersEvent$ = this._postAnswersEvent.asObservable();
         public questionsUpdatedEvent$ = this._questionsUpdatedEvent.asObservable();
-      
+
         /**
          * Create properties on the class - stores are singletons so
          * these properties will be available for life of the app
          */
-      
+
         private _bmiCalculation: number;
         private _questions: Question[];
-      
+
         /* -- GETTERS -- */
-      
+
         /**
          * Use getters to expose private class properties to other classes
          */
-      
+
         public get bmiCalculation(): number &#123;
           return this._bmiCalculation;
         &#125;
-      
+
         public get questions(): Question[] &#123;
           return this._questions;
         &#125;
-      
+
         /* -- PUBLIC METHODS -- */
-      
+
         /**
          * Get list of questions
          *
@@ -587,7 +587,7 @@
             &#125;
           );
         &#125;
-      
+
         /**
          * Submit answer list
          *
@@ -605,7 +605,7 @@
             &#125;
           );
         &#125;
-      
+
       &#125;</pre>
   </div>
 
@@ -614,13 +614,13 @@
   <h3>Add The BodyMassIndexService To The BodyMassIndexModule</h3>
 
   <p>Finally let's add the <code>BodyMassIndexService</code> to our <code>src/app/resources/body-mass-index/body-mass-index.module.ts</code> by adding it to our <code>provides</code> array. By doing so, this will expose our BodyMassIndexService to our entire application.</p>
-  
+
   <div class="codeblock">
     <pre>
       import &#123;NgModule&#125; from '@angular/core';
 
       import &#123;BodyMassIndexService&#125; from './body-mass-index.service';
-      
+
       @NgModule(&#123;
         providers: [
           BodyMassIndexService
@@ -659,12 +659,12 @@
     <pre>
       import &#123;NgModule&#125; from '@angular/core';
       import &#123;RouterModule, Routes&#125; from '@angular/router';
-      
+
       import &#123;BodyMassIndexComponent&#125; from './components/body-mass-index/body-mass-index.component';
       import &#123;HomeComponent&#125; from './components/home/home.component';
       import &#123;LoginComponent&#125; from './components/login/login.component';
       import &#123;AuthenticationGuard&#125; from './resources/authentication/authentication.guard';
-      
+
       /**
        * Create routes here and inject into RouterModule below in imports
        */
@@ -688,7 +688,7 @@
           component: LoginComponent
         &#125;
       ];
-      
+
       @NgModule(&#123;
         exports: [
           RouterModule
@@ -715,15 +715,15 @@
       import &#123;NgModule&#125; from '@angular/core';
       import &#123;ReactiveFormsModule&#125; from '@angular/forms';
       import &#123;RouterModule&#125; from '@angular/router';
-      
+
       import &#123;AppRoutingModule&#125; from './app-routing.module';
-      
+
       import &#123;AppComponent&#125; from './app.component';
       import &#123;BodyMassIndexComponent&#125; from './components/body-mass-index/body-mass-index.component';
       import &#123;HomeComponent&#125; from './components/home/home.component';
       import &#123;LoginComponent&#125; from './components/login/login.component';
       import &#123;ResourcesModule&#125; from './resources/resources.module';
-      
+
       @NgModule(&#123;
         declarations: [
           AppComponent,
@@ -822,45 +822,45 @@
       import &#123;Component, OnInit&#125; from '@angular/core';
       import &#123;Router&#125; from '@angular/router';
       import &#123;FormControl, FormGroup, Validators&#125; from '@angular/forms';
-      
+
       import &#123;AuthenticationStore&#125; from '../../resources/authentication/authentication.store';
-      
+
       @Component(&#123;
         selector: 'app-login',
         templateUrl: './login.component.html',
         styleUrls: ['./login.component.css']
       &#125;)
       export class LoginComponent implements OnInit &#123;
-      
+
         /* -- CONSTRUCTOR -- */
-      
+
         constructor(
           private _router: Router,
           private _authenticationStore: AuthenticationStore
         ) &#123;&#125;
-      
+
         /* -- PROPERTIES -- */
-      
+
         public form;
         public loading = false;
-      
+
         private _controls = &#123;
           client_id: new FormControl('', Validators.required),
           client_secret: new FormControl('', Validators.required),
           grant_type: new FormControl('client_credentials')
         &#125;;
-      
+
         /* -- PUBLIC METHODS -- */
-      
+
         public ngOnInit(): void &#123;
           this._authenticationStore.authenticationEvent$.subscribe(() => this._redirectAfterLogin());
           this.form = new FormGroup(this._controls, &#123; updateOn: 'change' &#125;);
-      
+
           if (this._authenticationStore.client) &#123;
             this._redirectAfterLogin();
           &#125;
         &#125;
-      
+
         public onSubmit(): void &#123;
           if (this.form.invalid) &#123;
             return;
@@ -868,14 +868,14 @@
           this.loading = true;
           this._authenticationStore.login(this.form.value);
         &#125;
-      
+
         /* -- PRIVATE METHODS -- */
-      
+
         private _redirectAfterLogin() &#123;
           this.loading = false;
           this._router.navigateByUrl('/body-mass-index');
         &#125;
-      
+
       &#125;</pre>
   </div>
 
@@ -997,17 +997,17 @@
     <pre>
       import &#123;Component, OnInit&#125; from '@angular/core';
       import &#123;FormControl, FormGroup, Validators&#125; from '@angular/forms';
-      
+
       import &#123;BodyMassIndexStore&#125; from '../../resources/body-mass-index/body-mass-index.store';
       import &#123;Question&#125; from '../../resources/questions/questions.types';
-      
+
       @Component(&#123;
         selector: 'app-body-mass-index',
         templateUrl: './body-mass-index.component.html',
         styleUrls: ['./body-mass-index.component.css']
       &#125;)
       export class BodyMassIndexComponent implements OnInit &#123;
-      
+
         /* -- CONSTRUCTOR -- */
 
         /**
@@ -1018,24 +1018,24 @@
         constructor(
           private _bodyMassIndexStore: BodyMassIndexStore
         ) &#123;&#125;
-      
+
         /* -- PROPERTIES -- */
-      
+
         /**
          * Create properties on the class - these properties will
          * be available for life of the component
          *
          * Any public properties are available in the view
          */
-      
+
         public bmiCalculation = '--';
         public form: FormGroup;
         public loading = true;
         public questions: Question[] = [];
         public submitting = false;
-      
+
         /* -- PUBLIC METHODS -- */
-      
+
         /**
          * ngOnInit is an Angular lifecycle method
          *
@@ -1045,14 +1045,14 @@
         public ngOnInit(): void &#123;
           // once the answers are posted and response is returned, execute callback
           this._bodyMassIndexStore.postAnswersEvent$.subscribe(() => this._getBmiCalculation());
-      
+
           // once the questions are retrieve and response is returned, execute callback
           this._bodyMassIndexStore.questionsUpdatedEvent$.subscribe(() => this._getQuestions());
-      
+
           // when component loads, retrieve questions
           this._bodyMassIndexStore.retrieveBodyMassIndexQuestions();
         &#125;
-      
+
         /**
          * Submit form
          */
@@ -1060,9 +1060,9 @@
           this.submitting = true;
           this._bodyMassIndexStore.postBodyMassIndexAnswers(this.form.value);
         &#125;
-      
+
         /* -- PRIVATE METHODS -- */
-      
+
         /**
          * Retrieve bmiCalculation and set on class property
          * @private
@@ -1071,7 +1071,7 @@
           this.submitting = false;
           this.bmiCalculation = (Math.round(this._bodyMassIndexStore.bmiCalculation * 10) / 10) + '%';
         &#125;
-      
+
         /**
          * Retrieve questions and set on class property and create the form
          * @private
@@ -1080,28 +1080,28 @@
           this.questions = this._bodyMassIndexStore.questions;
           this._createForm();
         &#125;
-      
+
         /**
          * Create reactive form elements using Angular's ReactiveFormsModule
          * @private
          */
         private _createForm(): void &#123;
           const controlObject = &#123;&#125;;
-      
+
           // loop through questions and create a FormControl for each element and add required validation
           // FormControl's are mapped to the view by adding their key (controlObject[question.id]) to
           // the [formControlName] directive: example - &lt;input [formControlName]="question.id"&gt;
           this.questions.forEach(
             question => controlObject[question.id] = new FormControl('', Validators.required)
           );
-      
+
           // create a FormGroup to track the form in the view
           this.form = new FormGroup(controlObject, &#123; updateOn: 'change' &#125;);
-      
+
           // loading is set to false to stop the spinner and show the form
           this.loading = false;
         &#125;
-      
+
       &#125;
 
     </pre>
