@@ -32,7 +32,7 @@ export class BodyMassIndexService {
       })
     };
 
-    const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/GetRequiredQuestionSenses/bmi';
+    const url = 'https://www.sleepapi.philips.com/smartsleep-analyzer/Scoring/GetRequiredQuestionSenses/bmi';
 
     return this._httpClient.get<any>(url, httpOptions);
   }
@@ -54,7 +54,7 @@ export class BodyMassIndexService {
       })
     };
 
-    const url = 'https://philips-prod.apigee.net/smartsleep-analyzer/Scoring/ComputeSense/bmi';
+    const url = 'https://www.sleepapi.philips.com/smartsleep-analyzer/Scoring/ComputeSense/bmi';
 
     return this._httpClient.post<any>(url, body, httpOptions);
   }

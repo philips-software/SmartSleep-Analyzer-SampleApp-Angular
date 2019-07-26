@@ -42,7 +42,7 @@ export class AuthenticationService {
       }
     });
 
-    const url = 'https://philips-prod.apigee.net/oauth/accessToken';
+    const url = 'https://www.sleepapi.philips.com/oauth/accessToken';
 
     return this._httpClient.post<any>(url, formData, httpOptions);
   }
